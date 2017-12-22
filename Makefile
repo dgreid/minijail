@@ -49,7 +49,7 @@ CORE_OBJECT_FILES := libminijail.o syscall_filter.o signal_handler.o \
 		libconstants.gen.o libsyscalls.gen.o
 
 all: CC_BINARY(minijail0) CC_LIBRARY(libminijail.so) \
-	CC_LIBRARY(libminijailpreload.so)
+	CC_LIBRARY(libminijailpreload.so) CC_STATIC_LIBRARY(libminijail.pie.a)
 
 parse_seccomp_policy: CXX_BINARY(parse_seccomp_policy)
 
@@ -66,6 +66,11 @@ clean: CLEAN(minijail0)
 CC_LIBRARY(libminijail.so): LDLIBS += -lcap
 CC_LIBRARY(libminijail.so): $(CORE_OBJECT_FILES)
 clean: CLEAN(libminijail.so)
+
+
+CC_STATIC_LIBRARY(libminijail.pie.a): LDLIBS += -lcap
+CC_STATIC_LIBRARY(libminijail.pie.a): $(CORE_OBJECT_FILES)
+clean: CLEAN(libminijail.pie.a)
 
 
 CXX_BINARY(libminijail_unittest): CXXFLAGS += -Wno-write-strings \
